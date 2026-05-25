@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sretan 50. Rođendan Mama 🌹</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- GIFT SCREEN -->
+  <div id="giftScreen" class="screen active">
+    <div class="sparkles" id="sparkleContainer"></div>
+    <div class="gift-wrapper" id="giftWrapper" onclick="showPasswordPrompt()">
+      <div class="gift-box">
+        <div class="gift-lid">
+          <div class="ribbon-h"></div>
+          <div class="bow">
+            <div class="bow-left"></div>
+            <div class="bow-right"></div>
+            <div class="bow-knot"></div>
+            <div class="bow-tail-l"></div>
+            <div class="bow-tail-r"></div>
+          </div>
+        </div>
+        <div class="gift-body">
+          <div class="ribbon-v"></div>
+          <div class="gift-shine"></div>
+          <div class="gift-shine2"></div>
+        </div>
+      </div>
+      <div class="gift-label">Klikni na poklon! 🎁</div>
+    </div>
+  </div>
+
+  <!-- PASSWORD SCREEN -->
+  <div id="passwordScreen" class="screen">
+    <div class="password-card">
+      <div class="lock-icon">🔒</div>
+      <h2>Unesi šifru</h2>
+      <p class="hint">Hint: <em>datum rođenja</em></p>
+      <div class="input-row">
+        <input type="password" id="passwordInput" placeholder="••••" maxlength="6" inputmode="numeric" />
+        <button onclick="checkPassword()">➜</button>
+      </div>
+      <p class="error-msg" id="errorMsg">Pogrešna šifra! Pokušaj ponovo 💔</p>
+    </div>
+  </div>
+
+  <!-- BOUQUET SCREEN -->
+  <div id="bouquetScreen" class="screen">
+    <div class="petals-bg" id="petalsBg"></div>
+    <div class="bouquet-container">
+      <h1 class="title-main">Sretan ti 50. Rođendan</h1>
+      <h2 class="title-sub">Mama 🌹</h2>
+      <p class="click-hint">Klikni na ruže</p>
+      <div class="roses-counter"><span id="rosesLeft">50</span> ruža ostalo</div>
+      <div class="bouquet-scene">
+        <svg id="bouquetSVG" class="bouquet-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <!-- Stem gradients -->
+            <linearGradient id="sg1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#1a4008"/>
+              <stop offset="50%" stop-color="#2d6010"/>
+              <stop offset="100%" stop-color="#1a4008"/>
+            </linearGradient>
+            <!-- Leaf gradients -->
+            <radialGradient id="lg1" cx="30%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#4a9020"/>
+              <stop offset="100%" stop-color="#1e4a05"/>
+            </radialGradient>
+            <radialGradient id="lg2" cx="70%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#4a9020"/>
+              <stop offset="100%" stop-color="#1e4a05"/>
+            </radialGradient>
+            <!-- Rose outer petals -->
+            <radialGradient id="rp_out" cx="50%" cy="60%" r="60%">
+              <stop offset="0%" stop-color="#cc0018"/>
+              <stop offset="70%" stop-color="#8b0000"/>
+              <stop offset="100%" stop-color="#5a0000"/>
+            </radialGradient>
+            <!-- Rose mid petals -->
+            <radialGradient id="rp_mid" cx="40%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#e8102a"/>
+              <stop offset="55%" stop-color="#bb0015"/>
+              <stop offset="100%" stop-color="#7a000f"/>
+            </radialGradient>
+            <!-- Rose inner -->
+            <radialGradient id="rp_in" cx="45%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#ff3355"/>
+              <stop offset="50%" stop-color="#dd1030"/>
+              <stop offset="100%" stop-color="#880015"/>
+            </radialGradient>
+            <!-- Rose center -->
+            <radialGradient id="rc" cx="38%" cy="38%" r="62%">
+              <stop offset="0%" stop-color="#ff6080"/>
+              <stop offset="45%" stop-color="#cc1035"/>
+              <stop offset="100%" stop-color="#6a000e"/>
+            </radialGradient>
+            <!-- Sepal -->
+            <linearGradient id="sep_g" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#2d6010"/>
+              <stop offset="100%" stop-color="#1a3a05"/>
+            </linearGradient>
+            <!-- Silver ribbon -->
+            <linearGradient id="rib_g" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#888"/>
+              <stop offset="25%" stop-color="#ddd"/>
+              <stop offset="50%" stop-color="#fff"/>
+              <stop offset="75%" stop-color="#ddd"/>
+              <stop offset="100%" stop-color="#888"/>
+            </linearGradient>
+            <radialGradient id="knot_g" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#fff"/>
+              <stop offset="55%" stop-color="#ccc"/>
+              <stop offset="100%" stop-color="#888"/>
+            </radialGradient>
+            <!-- Badge -->
+            <radialGradient id="bdg" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#fff"/>
+              <stop offset="55%" stop-color="#ccc"/>
+              <stop offset="100%" stop-color="#888"/>
+            </radialGradient>
+          </defs>
+
+          <!-- STEMS GROUP (rendered first = behind flowers) -->
+          <g id="stemsGroup"></g>
+
+          <!-- RIBBON (over stems, under flowers) -->
+          <g id="ribbonGroup">
+            <!-- ribbon band -->
+            <rect id="ribbonBand" x="90" y="322" width="220" height="14" rx="3" fill="url(#rib_g)" opacity="0"/>
+            <!-- bow loops -->
+            <ellipse id="bowL" cx="200" cy="322" rx="28" ry="11" fill="url(#rib_g)" transform="rotate(-18,200,322)" opacity="0"/>
+            <ellipse id="bowR" cx="200" cy="322" rx="28" ry="11" fill="url(#rib_g)" transform="rotate(18,200,322)" opacity="0"/>
+            <circle id="bowK" cx="200" cy="322" r="8" fill="url(#knot_g)" opacity="0"/>
+            <!-- tails -->
+            <path id="tailL" d="M195,330 Q185,345 178,358" stroke="url(#rib_g)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0"/>
+            <path id="tailR" d="M205,330 Q215,345 222,358" stroke="url(#rib_g)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0"/>
+          </g>
+
+          <!-- FLOWERS GROUP (rendered last = on top) -->
+          <g id="flowersGroup"></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTE OVERLAY -->
+  <div id="noteOverlay" class="note-overlay hidden">
+    <div class="note-card" id="noteCard">
+      <div class="note-inner">
+        <div class="note-rose">🌹</div>
+        <p class="note-number" id="noteNumber"></p>
+        <p class="note-text" id="noteText"></p>
+        <button class="note-close" onclick="closeNote()">✕ Zatvori</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL SCREEN -->
+  <div id="finalScreen" class="screen">
+    <div class="final-content">
+      <div class="hearts-rain" id="heartsRain"></div>
+      <h1 class="final-title">Sve 50 ruža su tvoje! 🌹</h1>
+      <p class="final-sub">S ljubavlju, zauvijek tvoje dijete</p>
+    </div>
+  </div>
+
+<script>
+const PASSWORD = "2605";
+const MESSAGES = [
+  "volim kako si strpljiva samnom",
+
+"volim kako se sprdaš samnom",
+
+"volim kako brines o meni",
+
+"volim kako ćak i kad si loše volje potrudiš se i dalje biti draga prema meni",
+
+"volim kako pazis na mene kad nisam dobro",
+
+"volim kako makar ti se neda i dalje kuhaš za mene kad sam gladan navečer",
+
+"volim kako se trudiš oko mojih ozljeda i pokušavaš pomoći",
+
+"volim kako mi ljepiš KT trake svaki put",
+
+"volim kako se sjetiš napraviti kolače koje volim onako random",
+
+"volim razgovore s tobom kasno navečer makar želiš spavati",
+
+"volim to da si uvijek tu za mene makar se teško otvaram",
+
+"volim da se trudiš oblikovati me u bolju osobu",
+
+"volim naše klokan fightove",
+
+"volim naša peckanja i natezanja",
+
+"volim kako brines o mojem zdravlju i pokušavaš mi uvalit povrče",
+
+"volim kako me probudiš za školu dok zaspim",
+
+"volim kako slušaš moje priče o pingiću makar ništa ne kužiš",
+
+"volim kako se ustaješ ujutro radi mene",
+
+"volim to da me podržavaš u mojim ciljevima",
+
+"volim kako me pokušavaš zagrliti dok odlazim od doma",
+
+"volim kako si mirna",
+
+"volim da imam puno tvoje genetike",
+
+"volim kako znaš šta želim jest dok ja ne znam",
+
+"volim kako znaš di sam pogubio svoje stvari kad ja ne znam",
+
+"volim kako ti je stalo do detalja u mojem životu",
+
+"volim kako se ponosiš samnom",
+
+"volim kako mi ne dajes previše posla",
+
+"volim kako me pohvalis dok napravim nešto dobro",
+
+"volim kako cijenis moje uspjehe",
+
+"volim tvoj perfekcionizam",
+
+"volim tvoju požrtvovnost",
+
+"volim kakva si s djecom",
+
+"volim kako pokušavaš upoznati moje prijatelje",
+
+"volim kako ti je stalo do odnosa sa Meginatorom",
+
+"volim tvoju predanost",
+
+"volim kako me češkaš navečer",
+
+"volim kako me masiraš poslije treninga",
+
+"volim sve naše uspomene",
+
+"volim kako sam te kao mali držao za zadnji džep da me ne izgubiš",
+
+"volim da mi uvijek iskreno kažeš što mislis",
+
+"volim to da mogu imati povjerenje u tebe",
+
+"volim to da mogu računati na tebe",
+
+"volim kako si bila moj personal šofer 18 godina",
+
+"volim tvoju nesebičnost",
+
+"volim to da mi nisi samo mama nego i prijateljica",
+
+"volim kako me pokušavaš smiriti kad nisam dobro",
+
+"volim tvoj karakter",
+
+"volim kako si igrala samnom pingić dok sam tek počeo igrati",
+
+"volim kako se smiješ na moje glupe fore",
+
+"volim te JAKO, hvala ti na svemu <3"
+];
+
+let rosesRemaining = 50;
+let clickedRoses = new Set();
+const NS = "http://www.w3.org/2000/svg";
+
+// Sparkles
+(function(){
+  const c = document.getElementById('sparkleContainer');
+  for(let i=0;i<35;i++){
+    const s=document.createElement('div');
+    s.className='sparkle';
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${3+Math.random()*6}px;height:${3+Math.random()*6}px;animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2}s`;
+    c.appendChild(s);
+  }
+})();
+
+function showPasswordPrompt(){
+  document.getElementById('giftWrapper').classList.add('shake');
+  setTimeout(()=>switchScreen('giftScreen','passwordScreen'),400);
+}
+function checkPassword(){
+  const v=document.getElementById('passwordInput').value;
+  if(v===PASSWORD){
+    document.getElementById('errorMsg').style.display='none';
+    switchScreen('passwordScreen','bouquetScreen');
+    setTimeout(()=>{buildBouquet();generatePetals();},300);
+  } else {
+    document.getElementById('errorMsg').style.display='block';
+    document.getElementById('passwordInput').value='';
+    const inp=document.getElementById('passwordInput');
+    inp.classList.add('shake');
+    setTimeout(()=>inp.classList.remove('shake'),600);
+  }
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPassword();});
+});
+function switchScreen(a,b){
+  const fa=document.getElementById(a),fb=document.getElementById(b);
+  fa.classList.remove('active'); fa.classList.add('fade-out');
+  setTimeout(()=>{fa.classList.remove('fade-out'); fb.classList.add('active');},500);
+}
+
+// ===================== BOUQUET LAYOUT =====================
+// 50 roses: positions as fraction of SVG (400w x 340h flower zone)
+// Dome shape, 6 rows, stems converge to center bottom (200, 490)
+function getRosePositions(){
+  // Each rose: {cx, cy, scale, rot}
+  // Dome rows from top to bottom
+  const rows = [
+    {n:4,  yF:0.05, xL:0.30, xR:0.70, sc:0.72},
+    {n:7,  yF:0.14, xL:0.22, xR:0.78, sc:0.80},
+    {n:10, yF:0.24, xL:0.15, xR:0.85, sc:0.86},
+    {n:11, yF:0.34, xL:0.13, xR:0.87, sc:0.90},
+    {n:10, yF:0.46, xL:0.17, xR:0.83, sc:0.94},
+    {n:8,  yF:0.57, xL:0.23, xR:0.77, sc:0.97},
+  ];
+  const W=400, H=340; // flower zone height
+  const out=[];
+  rows.forEach(row=>{
+    for(let i=0;i<row.n;i++){
+      const t = row.n===1 ? 0.5 : i/(row.n-1);
+      const cx = (row.xL + t*(row.xR-row.xL))*W + (Math.random()-0.5)*10;
+      const cy = row.yF*H + (Math.random()-0.5)*14;
+      const sc = row.sc + (Math.random()-0.5)*0.06;
+const rot = 0;
+      out.push({cx, cy, sc, rot});
+    }
+  });
+  return out;
+}
+
+// ===================== DRAW STEM =====================
+// from flower head (fx,fy) converge toward bundle center at bottom
+function drawStem(fx, fy, idx){
+  // stems converge to a fan at bottom center
+  const totalStems=50;
+  // spread at bottom: x from 130..270 based on index
+  const bx = 130 + (idx/49)*140 + (Math.random()-0.5)*6;
+  const by = 490;
+  // control points for natural S-curve
+  const cp1x = fx + (bx-fx)*0.25 + (Math.random()-0.5)*20;
+  const cp1y = fy + (by-fy)*0.4;
+  const cp2x = fx + (bx-fx)*0.7 + (Math.random()-0.5)*15;
+  const cp2y = fy + (by-fy)*0.75;
+
+  const g = document.createElementNS(NS,'g');
+
+  // main stem path
+  const path = document.createElementNS(NS,'path');
+  path.setAttribute('d',`M${fx.toFixed(1)},${fy.toFixed(1)} C${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${bx.toFixed(1)},${by.toFixed(1)}`);
+  path.setAttribute('stroke','url(#sg1)');
+  path.setAttribute('stroke-width','2.8');
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke-linecap','round');
+
+  // add 1-2 small leaves along stem
+  const numLeaves = Math.random()>0.4 ? 2 : 1;
+  for(let li=0;li<numLeaves;li++){
+    const t = 0.25 + li*0.3 + Math.random()*0.1;
+    // point on bezier at t
+    const lx = bezier(fx,cp1x,cp2x,bx,t);
+    const ly = bezier(fy,cp1y,cp2y,by,t);
+    // tangent direction
+    const tx2 = bezierD(fx,cp1x,cp2x,bx,t);
+    const ty2 = bezierD(fy,cp1y,cp2y,by,t);
+    const ang = Math.atan2(ty2,tx2)*(180/Math.PI);
+    const dir = li%2===0 ? 1 : -1;
+
+    const leaf = document.createElementNS(NS,'path');
+    // small oval leaf
+    leaf.setAttribute('d','M0,0 C8,-10 20,-8 18,0 C20,8 8,10 0,0');
+    leaf.setAttribute('fill', dir===1 ? 'url(#lg1)' : 'url(#lg2)');
+    leaf.setAttribute('stroke','#1a3a05');
+    leaf.setAttribute('stroke-width','0.4');
+    leaf.setAttribute('transform',`translate(${lx.toFixed(1)},${ly.toFixed(1)}) rotate(${(ang+dir*50).toFixed(1)})`);
+    g.appendChild(leaf);
+  }
+
+  g.appendChild(path);
+  return g;
+}
+
+function bezier(p0,p1,p2,p3,t){
+  const mt=1-t;
+  return mt*mt*mt*p0 + 3*mt*mt*t*p1 + 3*mt*t*t*p2 + t*t*t*p3;
+}
+function bezierD(p0,p1,p2,p3,t){
+  const mt=1-t;
+  return 3*mt*mt*(p1-p0) + 6*mt*t*(p2-p1) + 3*t*t*(p3-p2);
+}
+
+// ===================== DRAW ROSE HEAD =====================
+function drawRose(cx, cy, sc, rot, idx){
+  const g = document.createElementNS(NS,'g');
+  // transform: position + rotate + scale
+  g.setAttribute('transform',`translate(${cx.toFixed(1)},${cy.toFixed(1)}) rotate(${rot.toFixed(1)}) scale(${sc.toFixed(3)})`);
+  g.style.cursor='pointer';
+  g.setAttribute('opacity','0');
+g.style.animation=`svgFadeIn 0.5s ease ${idx*0.032+0.1}s forwards`;
+  const R = 20; // base rose radius
+
+  // --- CALYX / SEPALS (green, behind petals) ---
+  for(let i=0;i<5;i++){
+    const a=(i/5)*Math.PI*2 - Math.PI/2;
+    const sep=document.createElementNS(NS,'path');
+    const ex=Math.cos(a)*R*1.15, ey=Math.sin(a)*R*1.15;
+    sep.setAttribute('d',`M0,${R*0.3} C${ex*0.3},${ey*0.3+R*0.3} ${ex*0.85},${ey*0.85+R*0.1} ${ex},${ey}`);
+    sep.setAttribute('fill','url(#sep_g)');
+    sep.setAttribute('stroke','#163005');
+    sep.setAttribute('stroke-width','0.3');
+    g.appendChild(sep);
+  }
+
+  // --- OUTER PETALS (5, wide, cupped) ---
+  for(let i=0;i<5;i++){
+    const a=(i/5)*Math.PI*2+(Math.PI/10);
+    const p=document.createElementNS(NS,'path');
+    const px=Math.cos(a)*R*0.5, py=Math.sin(a)*R*0.5;
+    // cupped petal shape
+    const w=R*0.72, h=R*0.58;
+    const pa=a+Math.PI/2;
+    const wx=Math.cos(pa)*w, wy=Math.sin(pa)*w;
+    p.setAttribute('d',
+      `M${(px-wx*0.5).toFixed(1)},${(py-wy*0.5).toFixed(1)} ` +
+      `C${(px-wx+Math.cos(a)*R*0.3).toFixed(1)},${(py-wy+Math.sin(a)*R*0.3).toFixed(1)} ` +
+      `${(px+Math.cos(a)*R*0.9-wx*0.1).toFixed(1)},${(py+Math.sin(a)*R*0.9-wy*0.1).toFixed(1)} ` +
+      `${(px+wx*0.5).toFixed(1)},${(py+wy*0.5).toFixed(1)} ` +
+      `C${(px+wx+Math.cos(a)*R*0.3).toFixed(1)},${(py+wy+Math.sin(a)*R*0.3).toFixed(1)} ` +
+      `${(px+Math.cos(a)*R*0.2).toFixed(1)},${(py+Math.sin(a)*R*0.2).toFixed(1)} ` +
+      `${(px-wx*0.5).toFixed(1)},${(py-wy*0.5).toFixed(1)}`
+    );
+    p.setAttribute('fill','url(#rp_out)');
+    p.setAttribute('stroke','#6a0010');
+    p.setAttribute('stroke-width','0.5');
+    g.appendChild(p);
+  }
+
+  // --- MID PETALS (5, slightly smaller, rotated 36deg) ---
+  for(let i=0;i<5;i++){
+    const a=(i/5)*Math.PI*2;
+    const dist=R*0.35;
+    const px=Math.cos(a)*dist, py=Math.sin(a)*dist;
+    const pa=a+Math.PI/2;
+    const w=R*0.58, h=R*0.46;
+    const wx=Math.cos(pa)*w, wy=Math.sin(pa)*w;
+    const p=document.createElementNS(NS,'path');
+    p.setAttribute('d',
+      `M${(px-wx*0.45).toFixed(1)},${(py-wy*0.45).toFixed(1)} ` +
+      `C${(px-wx+Math.cos(a)*R*0.25).toFixed(1)},${(py-wy+Math.sin(a)*R*0.25).toFixed(1)} ` +
+      `${(px+Math.cos(a)*R*0.8).toFixed(1)},${(py+Math.sin(a)*R*0.8).toFixed(1)} ` +
+      `${(px+wx*0.45).toFixed(1)},${(py+wy*0.45).toFixed(1)} ` +
+      `C${(px+wx+Math.cos(a)*R*0.2).toFixed(1)},${(py+wy+Math.sin(a)*R*0.2).toFixed(1)} ` +
+      `${(px+Math.cos(a)*R*0.15).toFixed(1)},${(py+Math.sin(a)*R*0.15).toFixed(1)} ` +
+      `${(px-wx*0.45).toFixed(1)},${(py-wy*0.45).toFixed(1)}`
+    );
+    p.setAttribute('fill','url(#rp_mid)');
+    p.setAttribute('stroke','#7a0012');
+    p.setAttribute('stroke-width','0.4');
+    g.appendChild(p);
+  }
+
+  // --- INNER PETALS (4, tight, upright) ---
+  for(let i=0;i<4;i++){
+    const a=(i/4)*Math.PI*2+(Math.PI/8);
+    const dist=R*0.15;
+    const px=Math.cos(a)*dist, py=Math.sin(a)*dist;
+    const pa=a+Math.PI/2;
+    const w=R*0.38, h=R*0.32;
+    const wx=Math.cos(pa)*w, wy=Math.sin(pa)*w;
+    const p=document.createElementNS(NS,'path');
+    p.setAttribute('d',
+      `M${(px-wx*0.4).toFixed(1)},${(py-wy*0.4).toFixed(1)} ` +
+      `C${(px-wx*0.8+Math.cos(a)*R*0.2).toFixed(1)},${(py-wy*0.8+Math.sin(a)*R*0.2).toFixed(1)} ` +
+      `${(px+Math.cos(a)*R*0.6).toFixed(1)},${(py+Math.sin(a)*R*0.6).toFixed(1)} ` +
+      `${(px+wx*0.4).toFixed(1)},${(py+wy*0.4).toFixed(1)} ` +
+      `C${(px+wx*0.7+Math.cos(a)*R*0.1).toFixed(1)},${(py+wy*0.7+Math.sin(a)*R*0.1).toFixed(1)} ` +
+      `${px.toFixed(1)},${py.toFixed(1)} ` +
+      `${(px-wx*0.4).toFixed(1)},${(py-wy*0.4).toFixed(1)}`
+    );
+    p.setAttribute('fill','url(#rp_in)');
+    p.setAttribute('stroke','#880015');
+    p.setAttribute('stroke-width','0.35');
+    g.appendChild(p);
+  }
+
+  // --- CENTER SPIRAL (3 curled petals) ---
+  for(let i=0;i<3;i++){
+    const a=(i/3)*Math.PI*2+(Math.PI/6);
+    const sp=document.createElementNS(NS,'path');
+    const x1=Math.cos(a)*R*0.08, y1=Math.sin(a)*R*0.08;
+    const x2=Math.cos(a)*R*0.28, y2=Math.sin(a)*R*0.28;
+    const x3=Math.cos(a+1.2)*R*0.22, y3=Math.sin(a+1.2)*R*0.22;
+    sp.setAttribute('d',`M${x1.toFixed(1)},${y1.toFixed(1)} C${x2.toFixed(1)},${(y2-4).toFixed(1)} ${x3.toFixed(1)},${(y3+2).toFixed(1)} ${(x3*0.3).toFixed(1)},${(y3*0.3+1).toFixed(1)}`);
+    sp.setAttribute('stroke','#cc1030');
+    sp.setAttribute('stroke-width','4.5');
+    sp.setAttribute('fill','none');
+    sp.setAttribute('stroke-linecap','round');
+    sp.setAttribute('opacity','0.85');
+    g.appendChild(sp);
+  }
+
+  // --- CENTER DISC ---
+  const cDisc=document.createElementNS(NS,'circle');
+  cDisc.setAttribute('r',(R*0.22).toFixed(1));
+  cDisc.setAttribute('fill','url(#rc)');
+  cDisc.setAttribute('stroke','#880015');
+  cDisc.setAttribute('stroke-width','0.5');
+  g.appendChild(cDisc);
+
+  // highlight
+  const hl=document.createElementNS(NS,'ellipse');
+  hl.setAttribute('rx',(R*0.09).toFixed(1));
+  hl.setAttribute('ry',(R*0.07).toFixed(1));
+  hl.setAttribute('cx',(-R*0.06).toFixed(1));
+  hl.setAttribute('cy',(-R*0.08).toFixed(1));
+  hl.setAttribute('fill','rgba(255,180,180,0.45)');
+  g.appendChild(hl);
+
+  // --- BADGE ---
+  const bg2=document.createElementNS(NS,'g');
+  bg2.setAttribute('transform',`translate(${(R*0.72).toFixed(1)},${(-R*0.72).toFixed(1)})`);
+  const bc=document.createElementNS(NS,'circle');
+  bc.setAttribute('r','7');
+  bc.setAttribute('fill','url(#bdg)');
+  bc.setAttribute('stroke','#aaa');
+  bc.setAttribute('stroke-width','0.8');
+  const bt=document.createElementNS(NS,'text');
+  bt.setAttribute('text-anchor','middle');
+  bt.setAttribute('dominant-baseline','central');
+  bt.setAttribute('font-size', idx+1>9?'5':'6.5');
+  bt.setAttribute('font-weight','bold');
+  bt.setAttribute('fill','#222');
+  bt.setAttribute('font-family','serif');
+  bt.textContent=idx+1;
+  bg2.appendChild(bc); bg2.appendChild(bt);
+  g.appendChild(bg2);
+
+  // invisible hit area
+  const hit=document.createElementNS(NS,'circle');
+  hit.setAttribute('r',(R*1.2).toFixed(1));
+  hit.setAttribute('fill','transparent');
+  g.appendChild(hit);
+
+  return g;
+}
+
+// ===================== BUILD BOUQUET =====================
+function buildBouquet(){
+  const stemsG=document.getElementById('stemsGroup');
+  const flowersG=document.getElementById('flowersGroup');
+  stemsG.innerHTML=''; flowersG.innerHTML='';
+
+  const positions=getRosePositions();
+
+  // Show ribbon
+  ['ribbonBand','bowL','bowR','bowK','tailL','tailR'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el){ el.setAttribute('opacity','0'); el.style.animation=`svgIn 0.4s ease ${0.1+i*0.05}s forwards`; }
+  });
+
+  positions.forEach((pos,i)=>{
+    // stem: from bottom of rose head to bundle bottom
+    const stemEl = drawStem(
+  pos.cx,
+  pos.cy + (18 * pos.sc),
+  i
+);
+    stemEl.setAttribute('opacity','0');
+stemEl.style.animation=`svgFadeIn 0.4s ease ${i*0.028}s forwards`;
+    stemsG.appendChild(stemEl);
+
+    // flower
+    const roseEl=drawRose(pos.cx, pos.cy, pos.sc, pos.rot, i);
+    roseEl.addEventListener('click',()=>pickRose(i,roseEl));
+    roseEl.addEventListener('mouseenter',()=>{ if(!clickedRoses.has(i)) roseEl.style.filter='brightness(1.25) drop-shadow(0 0 7px rgba(255,60,60,0.9))'; });
+    roseEl.addEventListener('mouseleave',()=>{ roseEl.style.filter=''; });
+    flowersG.appendChild(roseEl);
+  });
+}
+
+function pickRose(idx, el){
+  if(clickedRoses.has(idx)) return;
+  clickedRoses.add(idx);
+el.style.animation='roseFlyOut 0.65s ease forwards';  setTimeout(()=>{
+    el.style.visibility='hidden';
+    rosesRemaining--;
+    document.getElementById('rosesLeft').textContent=rosesRemaining;
+    showNote(idx);
+    if(rosesRemaining===0) setTimeout(endScreen,2500);
+  },650);
+}
+function showNote(idx){
+  const ov=document.getElementById('noteOverlay');
+  const nc=document.getElementById('noteCard');
+  document.getElementById('noteNumber').textContent=`Ruža #${idx+1} od 50`;
+  document.getElementById('noteText').textContent=MESSAGES[idx];
+  ov.classList.remove('hidden');
+  nc.classList.remove('note-pop');
+  void nc.offsetWidth;
+  nc.classList.add('note-pop');
+}
+function closeNote(){ document.getElementById('noteOverlay').classList.add('hidden'); }
+function endScreen(){ switchScreen('bouquetScreen','finalScreen'); roseRain(); }
+function roseRain(){
+  const c=document.getElementById('heartsRain');
+  for(let i=0;i<55;i++){
+    const h=document.createElement('div');
+    h.className='heart-rain';
+    h.textContent=['🌹','🌹','❤️','🌹','🌹','❤️'][Math.floor(Math.random()*6)];
+    h.style.cssText=`left:${Math.random()*100}%;animation-delay:${Math.random()*4}s;animation-duration:${3+Math.random()*3}s;font-size:${1+Math.random()*1.8}rem`;
+    c.appendChild(h);
+  }
+}
+function generatePetals(){
+  const bg=document.getElementById('petalsBg');
+  for(let i=0;i<25;i++){
+    const p=document.createElement('div');
+    p.className='falling-petal';
+    p.style.cssText=`left:${Math.random()*100}%;animation-delay:${Math.random()*6}s;animation-duration:${5+Math.random()*5}s;opacity:${0.3+Math.random()*0.4}`;
+    bg.appendChild(p);
+  }
+}
+</script>
+</body>
+</html>
+
+
